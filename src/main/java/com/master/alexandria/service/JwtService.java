@@ -54,7 +54,7 @@ public class JwtService {
                 .setExpiration(Date.from(validUntil))
                 .signWith(getSignKey(), SignatureAlgorithm.HS512)
                 .compact();
-        insertJwt(jwt, Timestamp.from(validUntil));
+        insertJwt(jwt, Timestamp.from(validUntil), email);
         return jwt;
     }
 
@@ -80,12 +80,13 @@ public class JwtService {
         }
     }
 
-    private void insertJwt(String jwt, Timestamp validUntil) {
+    private void insertJwt(String jwt, Timestamp validUntil, String email) {
         var jwtModel = JwtValid.builder()
                         .jwt(jwt)
                         .validUntil(validUntil)
                         .valid(true)
-                         .build();
+                        .email(email)
+                        .build();
           jwtRepository.save(jwtModel);
     }
 

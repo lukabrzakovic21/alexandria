@@ -40,4 +40,7 @@ public class JwtValid {
 
     @Column(name = "valid_until")
     private Timestamp validUntil;
+
+    @Column(name = "email")
+    private String email;
 }
