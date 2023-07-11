@@ -22,4 +22,5 @@ public class LoginPair {
 
     private boolean successfulLogin;
     private String role;
+    private String publicId;
 }

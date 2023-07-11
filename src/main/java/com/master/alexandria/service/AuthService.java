@@ -24,7 +24,7 @@ public class AuthService {
         logger.info("Authentication flow started");
         var authentication = istanbul.authenticateUser(authRequestDTO);
          if(authentication.isSuccessfulLogin()) {
-             return jwtService.generateToken(authRequestDTO.getEmail(), authentication.getRole());
+             return jwtService.generateToken(authRequestDTO.getEmail(), authentication.getRole(), authentication.getPublicId());
          }
          else {
              logger.error("User with email: {} doesn't exist.", authRequestDTO.getEmail());

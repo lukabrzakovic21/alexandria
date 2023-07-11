@@ -20,7 +20,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Optional;
 
 @Component
 public class JwtService {
@@ -36,11 +35,12 @@ public class JwtService {
         this.jwtRepository = jwtRepository;
     }
 
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, String role, String publicId) {
 
         //should be aware that user can get only one role
         var claims = new HashMap<String, String>();
         claims.put("role", role);
+        claims.put("public_id", publicId);
         return createJWT(email, claims);
     }
 
