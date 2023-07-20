@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class JwtService {
 
     private final JwtRepository jwtRepository;
-    private final Logger logger = LoggerFactory.getLogger(AuthRequestController.class);
+    private final Logger logger = LoggerFactory.getLogger(JwtService.class);
 
 
     public static Long EXPIRATION_TIME = 60L;
@@ -38,6 +38,7 @@ public class JwtService {
     public String generateToken(String email, String role, String publicId) {
 
         //should be aware that user can get only one role
+        logger.info("Generating jwt for user with email: {}", email);
         var claims = new HashMap<String, String>();
         claims.put("role", role);
         claims.put("public_id", publicId);
@@ -64,15 +65,18 @@ public class JwtService {
     }
 
     public boolean isValid(String jwt) {
-
+        logger.info("Check is jwt valid.");
         if (Strings.isNullOrEmpty(jwt)
                 || !jwt.startsWith("Bearer ")) {
+            logger.warn("Jwt is not valid");
             return false;
         }
         String token = jwt.replace("Bearer ", "");
 
         var jwtResult = jwtRepository.findByJwt(token);
         if(jwtResult.isEmpty()) {
+            logger.warn("Jwt is not valid");
+
             return false;
         }
         else {
@@ -94,8 +98,9 @@ public class JwtService {
     @Scheduled(cron = "0 */2 * ? * *")
     @Transactional
     public void deleteInvalidJwts() {
-        logger.info("Start delete in cron job at {}", Instant.now());
+        logger.info("Start deletion of invalid tokens in cron job at {}", Instant.now());
         jwtRepository.deleteAllByValidOrValidUntilBefore(false, Timestamp.from(Instant.now()));
+        logger.info("Deletion of invalid tokens finished at {}", Instant.now());
     }
 
     public boolean logout(String jwt) {

@@ -21,13 +21,14 @@ public class AuthService {
     }
 
     public String generateToken(AuthRequestDTO authRequestDTO) {
-        logger.info("Authentication flow started");
+        logger.info("Authentication flow started for user with email: ", authRequestDTO.getEmail());
         var authentication = istanbul.authenticateUser(authRequestDTO);
          if(authentication.isSuccessfulLogin()) {
+             logger.info("Authentication successfull user with email: ", authRequestDTO.getEmail());
              return jwtService.generateToken(authRequestDTO.getEmail(), authentication.getRole(), authentication.getPublicId());
          }
          else {
-             logger.error("User with email: {} doesn't exist.", authRequestDTO.getEmail());
+             logger.warn("User with email: {} doesn't exist.", authRequestDTO.getEmail());
              throw new UserNotFoundException(String.format("User with email %s cannot be authorized.", authRequestDTO.getEmail()));
          }
     }
