@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(value = "istanbul", url = "http://localhost:8081")
+@FeignClient(value = "istanbul", url = "http://istanbul:8081")
 public interface IstanbulClient {
 
         @RequestMapping(method = RequestMethod.POST, value = "/user/login", produces = "application/json", consumes = "application/json")
