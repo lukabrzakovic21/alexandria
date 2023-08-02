@@ -2,7 +2,6 @@ package com.master.alexandria.service;
 
 import com.google.common.base.Strings;
 import com.master.alexandria.common.model.JwtValid;
-import com.master.alexandria.controller.AuthRequestController;
 import com.master.alexandria.repository.JwtRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,6 +10,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +29,8 @@ public class JwtService {
 
 
     public static Long EXPIRATION_TIME = 60L;
-    private static String SECRET = "somesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkeysomesecretkey";
+    @Value("${secret.key}")
+    private String SECRET;
 
     public JwtService(JwtRepository jwtRepository) {
         this.jwtRepository = jwtRepository;
@@ -95,7 +96,7 @@ public class JwtService {
     }
 
     //change cron job date
-    @Scheduled(cron = "0 */2 * ? * *")
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void deleteInvalidJwts() {
         logger.info("Start deletion of invalid tokens in cron job at {}", Instant.now());
